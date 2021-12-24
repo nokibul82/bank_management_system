@@ -589,6 +589,8 @@ public class employeeHome extends javax.swing.JFrame {
         welcomePanel.setVisible(false);
         panel.setVisible(true);
     }
+    
+  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel createBtn;

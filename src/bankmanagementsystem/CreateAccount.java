@@ -49,7 +49,7 @@ public class CreateAccount extends javax.swing.JPanel {
         idNoFeild = new javax.swing.JTextField();
         proofIdComboBox = new javax.swing.JComboBox<>();
         imageLabel = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        photoBtn = new javax.swing.JButton();
         signLabel = new javax.swing.JLabel();
         signBtn = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -142,11 +142,11 @@ public class CreateAccount extends javax.swing.JPanel {
         imageLabel.setBackground(new java.awt.Color(255, 255, 255));
         imageLabel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
-        jButton1.setFont(new java.awt.Font("Montserrat", 0, 14)); // NOI18N
-        jButton1.setText("Choose Photo");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        photoBtn.setFont(new java.awt.Font("Montserrat", 0, 14)); // NOI18N
+        photoBtn.setText("Choose Photo");
+        photoBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                photoBtnActionPerformed(evt);
             }
         });
 
@@ -161,11 +161,11 @@ public class CreateAccount extends javax.swing.JPanel {
         });
 
         jButton2.setFont(new java.awt.Font("Montserrat", 0, 14)); // NOI18N
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bankmanagementsystem/icons/icons8_Done_14px.png"))); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bankmanagementsystem/icons/icons8_Done_20px_1.png"))); // NOI18N
         jButton2.setText("Submit");
 
         jButton3.setFont(new java.awt.Font("Montserrat", 0, 14)); // NOI18N
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bankmanagementsystem/icons/icons8_refresh_14px_1.png"))); // NOI18N
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bankmanagementsystem/icons/icons8_refresh_20px.png"))); // NOI18N
         jButton3.setText("Refresh");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -243,7 +243,7 @@ public class CreateAccount extends javax.swing.JPanel {
                         .addComponent(signBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(signLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
                         .addComponent(imageLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)))
+                        .addComponent(photoBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -273,7 +273,7 @@ public class CreateAccount extends javax.swing.JPanel {
                                         .addComponent(jLabel6))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jButton1)
+                                            .addComponent(photoBtn)
                                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(18, 18, 18)
                                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -324,7 +324,7 @@ public class CreateAccount extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void photoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_photoBtnActionPerformed
         JFileChooser chooser = new JFileChooser();
         chooser.showOpenDialog(null);
         File f = chooser.getSelectedFile();
@@ -333,7 +333,7 @@ public class CreateAccount extends javax.swing.JPanel {
         Image image = icon.getImage().getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(), Image.SCALE_SMOOTH);
         imageLabel.setIcon(icon);       
               
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_photoBtnActionPerformed
 
     private void signBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signBtnActionPerformed
        JFileChooser chooser = new JFileChooser();
@@ -371,7 +371,6 @@ public class CreateAccount extends javax.swing.JPanel {
     private javax.swing.JTextField fulnameField;
     private javax.swing.JTextField idNoFeild;
     private javax.swing.JLabel imageLabel;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private com.toedter.calendar.JDateChooser jDateChooser1;
@@ -392,6 +391,7 @@ public class CreateAccount extends javax.swing.JPanel {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JCheckBox maleCheckBox;
+    private javax.swing.JButton photoBtn;
     private javax.swing.JComboBox<String> proofIdComboBox;
     private javax.swing.JButton signBtn;
     private javax.swing.JLabel signLabel;
