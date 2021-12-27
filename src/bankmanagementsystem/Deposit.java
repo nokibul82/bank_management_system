@@ -2,12 +2,18 @@
 package bankmanagementsystem;
 
 import java.awt.HeadlessException;
+import java.awt.Image;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 
 public class Deposit extends javax.swing.JPanel {
 
+    int oldBalance,newBalance;
     
     public Deposit() {
         initComponents();
@@ -76,6 +82,11 @@ public class Deposit extends javax.swing.JPanel {
         searchBtn.setFont(new java.awt.Font("Montserrat", 0, 14)); // NOI18N
         searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bankmanagementsystem/icons/icons8_search_14px_1.png"))); // NOI18N
         searchBtn.setText("  Search Account");
+        searchBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchBtnActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Montserrat", 0, 14)); // NOI18N
         jLabel2.setText("Deposit Amount :");
@@ -86,10 +97,20 @@ public class Deposit extends javax.swing.JPanel {
         refreshBtn.setFont(new java.awt.Font("Montserrat", 0, 14)); // NOI18N
         refreshBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bankmanagementsystem/icons/icons8_refresh_20px.png"))); // NOI18N
         refreshBtn.setText("Refresh");
+        refreshBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshBtnActionPerformed(evt);
+            }
+        });
 
         submitBtn.setFont(new java.awt.Font("Montserrat", 0, 14)); // NOI18N
         submitBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bankmanagementsystem/icons/icons8_Done_20px_1.png"))); // NOI18N
         submitBtn.setText("Submit");
+        submitBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitBtnActionPerformed(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Montserrat", 0, 14)); // NOI18N
         jLabel6.setText("Deposit Type :");
@@ -193,49 +214,101 @@ public class Deposit extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    public String getAccountFeild(){
+    private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
+        try{
+        
+    Connection con = DatabaseConnection.getConnection();
+    
+    String url ="Select name,type,balance,image from accounts WHERE account_no ='"+getAccount()+"'";
+    
+    Statement st = con.createStatement();
+    ResultSet rs = st.executeQuery(url);
+    if(rs.next()){
+        String name = rs.getString("name");
+        setname(name);
+        String type = rs.getString("type");
+        setType(type);
+        int balance = rs.getInt("balance");
+        setBalance(balance+"");
+        oldBalance=balance;
+        String img = rs.getString("image");
+        ImageIcon icon = new ImageIcon(img);
+        icon.getImage().getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(), Image.SCALE_SMOOTH);
+        setImage(icon);
+    }
+        
+    
+    }catch(ClassNotFoundException | SQLException e){
+       System.out.println(e);
+       JOptionPane.showMessageDialog(null,"There has been an ERROR ! Sorry ! Try Again.");
+    }
+    }//GEN-LAST:event_searchBtnActionPerformed
+
+    private void submitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
+        int amount = this.getAmount();
+        if(amount>0){
+            newBalance = oldBalance + amount;
+            try{
+            
+                Connection con = DatabaseConnection.getConnection();
+                String url1 = "UPDATE accounts SET balance="+newBalance+" WHERE account_no = '"+getAccount()+"';";
+                String url2 = "Insert into transactions(account_no,transaction,cheque_no,amount,balance) values('"+getAccount()+"','Deposit','"+getChequeNo()+"','"+amount+"','"+newBalance+"');";
+            
+                Statement st = con.createStatement();
+                st.executeUpdate(url1);
+                st.executeUpdate(url2);
+            
+                JOptionPane.showMessageDialog(this,"Withdraw successfull !");
+            
+            }catch(ClassNotFoundException | SQLException e){
+                System.out.println(e);
+                JOptionPane.showMessageDialog(this,"There has been an ERROR ! Sorry ! Try Again.");
+            }
+        
+        }else{
+            JOptionPane.showMessageDialog(this, "Please enter valid amount");
+        }
+    }//GEN-LAST:event_submitBtnActionPerformed
+
+    private void refreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBtnActionPerformed
+        accountField.setText("");
+        nameField.setText("");
+        typeField.setText("");
+        balanceField.setText("");
+        chequeNoField.setText("");
+        amountField.setText("");
+        imageLabel.setIcon(null);
+    }//GEN-LAST:event_refreshBtnActionPerformed
+
+    public String getAccount(){
         return accountField.getText();
     }
     
-    public void setNameField(String name){
+    public void setname(String name){
         nameField.setText(name);
     }
     
-    public void setTypeField(String type){
+    public void setType(String type){
         typeField.setText(type);
     }
     
-    public void setBalanceField(String balance){
+    public void setBalance(String balance){
         balanceField.setText(balance);
     }
     
-    public String getDepositdrawType(){
+    public String getDepositType(){
         return (String) depositTypeComboBox.getEditor().getItem();
     }
     
-    public String getChequeNoField(){
+    public String getChequeNo(){
         return chequeNoField.getText();
     }
     
-    public int getAmountField(){
-        try{
-            
-             int a = Integer.parseInt(amountField.getText());
-        if(a<0){
-            JOptionPane.showMessageDialog(null,"Please enter positive number");
-            return 0;
-        }else{
-        return a;
-        }
-            
-        }catch(HeadlessException | NumberFormatException e){
-            JOptionPane.showMessageDialog(this,"Please enter a valid number. Don't use character.");
-            return 0;
-        }
-                   
+    public int getAmount(){
+        return Integer.parseInt(amountField.getText());              
     }
     
-    public void setImageLabel(ImageIcon icon){
+    public void setImage(ImageIcon icon){
         imageLabel.setIcon(icon);
     }
     

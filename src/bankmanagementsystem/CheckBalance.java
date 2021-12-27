@@ -1,7 +1,13 @@
 
 package bankmanagementsystem;
 
+import java.awt.Image;
+import java.sql.ResultSet;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 public class CheckBalance extends javax.swing.JPanel {
 
@@ -60,6 +66,11 @@ public class CheckBalance extends javax.swing.JPanel {
 
         jButton1.setFont(new java.awt.Font("Montserrat", 0, 14)); // NOI18N
         jButton1.setText("Check Balance");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         imageLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -127,6 +138,36 @@ public class CheckBalance extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try{
+        
+    Connection con = DatabaseConnection.getConnection();
+    
+    String url ="Select name,type,balance,image from accounts WHERE account_no ="+accountField.getText()+"";
+    
+    Statement st = con.createStatement();
+    ResultSet rs = st.executeQuery(url);
+    if(rs.next()){
+        String name = rs.getString("name");
+        setNameField(name);
+        String type = rs.getString("type");
+        setTypeField(type);
+        int balance = rs.getInt("balance");
+        setBalanceField(balance+"");
+        String img = rs.getString("image");
+        ImageIcon icon = new ImageIcon(img);
+        icon.getImage().getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(), Image.SCALE_SMOOTH);
+        setImageLabel(icon);
+    }
+        
+    
+    }catch(ClassNotFoundException | SQLException e){
+       System.out.println(e);
+       JOptionPane.showMessageDialog(this,"There has been an ERROR ! Sorry ! Try Again.");
+    }
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
     public String getAccountField(){
         return accountField.getText();
     }

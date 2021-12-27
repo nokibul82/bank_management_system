@@ -1,9 +1,19 @@
 
 package bankmanagementsystem;
 
+import java.awt.Image;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+
 
 public class Transfer extends javax.swing.JPanel {
 
+    int oldBalance1,oldBalance2,newBalace1,newBalance2; 
+    
     public Transfer() {
         initComponents();
         setBounds(300,0,900,700);
@@ -86,6 +96,11 @@ public class Transfer extends javax.swing.JPanel {
         searchBtn1.setFont(new java.awt.Font("Montserrat", 0, 14)); // NOI18N
         searchBtn1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bankmanagementsystem/icons/icons8_search_14px_1.png"))); // NOI18N
         searchBtn1.setText("  Search Account");
+        searchBtn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchBtn1ActionPerformed(evt);
+            }
+        });
 
         jSeparator1.setBackground(new java.awt.Color(0, 0, 0));
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
@@ -100,6 +115,11 @@ public class Transfer extends javax.swing.JPanel {
         searchBtn2.setFont(new java.awt.Font("Montserrat", 0, 14)); // NOI18N
         searchBtn2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bankmanagementsystem/icons/icons8_search_14px_1.png"))); // NOI18N
         searchBtn2.setText("  Search Account");
+        searchBtn2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchBtn2ActionPerformed(evt);
+            }
+        });
 
         jLabel9.setFont(new java.awt.Font("Montserrat", 0, 14)); // NOI18N
         jLabel9.setText("Name :");
@@ -125,10 +145,20 @@ public class Transfer extends javax.swing.JPanel {
         submitBtn.setFont(new java.awt.Font("Montserrat", 0, 14)); // NOI18N
         submitBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bankmanagementsystem/icons/icons8_Done_20px_1.png"))); // NOI18N
         submitBtn.setText("Submit");
+        submitBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitBtnActionPerformed(evt);
+            }
+        });
 
         refreshBtn.setFont(new java.awt.Font("Montserrat", 0, 14)); // NOI18N
         refreshBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bankmanagementsystem/icons/icons8_refresh_20px.png"))); // NOI18N
         refreshBtn.setText("Refresh");
+        refreshBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -246,7 +276,136 @@ public class Transfer extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void searchBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtn1ActionPerformed
 
+        if(accountField1.getText().equals(accountField2.getText())){
+            JOptionPane.showMessageDialog(this,"Please enter two different account");
+        }else{
+    
+        try{
+        
+    Connection con = DatabaseConnection.getConnection();
+    
+    String url ="Select name,type,balance from accounts WHERE account_no ="+accountField1.getText()+"";
+    
+    Statement st = con.createStatement();
+    ResultSet rs = st.executeQuery(url);
+    if(rs.next()){
+        String name = rs.getString("name");
+        nameField1.setText(name);
+        String type = rs.getString("type");
+        typeField1.setText(type);
+        int balance = rs.getInt("balance");
+        balanceField.setText(balance+"");
+        oldBalance1=balance;
+    }else{
+        JOptionPane.showMessageDialog(this,"No account Found !");
+    }
+        
+    
+    }catch(ClassNotFoundException | SQLException e){
+       System.out.println(e);
+       JOptionPane.showMessageDialog(null,"There has been an ERROR ! Sorry ! Try Again.");
+    }
+        
+        }
+    }//GEN-LAST:event_searchBtn1ActionPerformed
+
+    private void refreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBtnActionPerformed
+        this.accountField1.setText("");
+        this.nameField1.setText("");
+        this.typeField1.setText("");
+        this.balanceField.setText("");
+        
+        this.accountField2.setText("");
+        this.nameField2.setText("");
+        this.typeField2.setText("");
+        
+        this.amountField.setText("");
+        
+    }//GEN-LAST:event_refreshBtnActionPerformed
+
+    private void searchBtn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtn2ActionPerformed
+        if(accountField1.getText().equals(accountField2.getText())){
+            JOptionPane.showMessageDialog(this,"Please enter two different account");
+        }else{
+    
+        try{
+        
+    Connection con = DatabaseConnection.getConnection();
+    
+    String url ="Select name,type,balance from accounts WHERE account_no ="+accountField2.getText()+"";
+    
+    Statement st = con.createStatement();
+    ResultSet rs = st.executeQuery(url);
+    if(rs.next()){
+        String name = rs.getString("name");
+        nameField2.setText(name);
+        String type = rs.getString("type");
+        typeField2.setText(type);
+        int balance = rs.getInt("balance");       
+        oldBalance2=balance;
+    }else{
+        JOptionPane.showMessageDialog(this,"No account Found !");
+    }
+        
+    
+    }catch(ClassNotFoundException | SQLException e){
+       System.out.println(e);
+       JOptionPane.showMessageDialog(null,"There has been an ERROR ! Sorry ! Try Again.");
+    }
+        
+        }
+    }//GEN-LAST:event_searchBtn2ActionPerformed
+
+    private void submitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
+        
+        if(amountField.getText().equals("")){
+              JOptionPane.showMessageDialog(null,"Please enter the correct amount.");  
+            }else{
+              
+                    int amount = Integer.parseInt(amountField.getText());
+                if(oldBalance1>=amount){
+                    this.newBalace1 = oldBalance1-amount;
+                    this.newBalance2 = oldBalance2+amount; 
+                
+                //execution of update query
+                try{
+            
+                    Connection con = DatabaseConnection.getConnection();                    
+                    Statement st = con.createStatement();              
+            
+                    String url1="Update accounts Set balance="+this.newBalace1+" WHERE account_no ='"+accountField1.getText()+"'";
+                    String url2="Update accounts Set balance="+this.newBalance2+" WHERE account_no ='"+accountField2.getText()+"'";
+            
+                    st.executeUpdate(url1);
+                    st.executeUpdate(url2);
+                    
+                    String url3 ="Insert into transactions(account_no,transaction,amount,balance) values('"+accountField1.getText()+"','Transfer Out','"+amount+"','"+this.newBalace1+"');";
+                    String url4 ="Insert into transactions(account_no,transaction,amount,balance) values('"+accountField2.getText()+"','Transfer In','"+amount+"','"+this.newBalance2+"');";
+                    
+                    st.executeUpdate(url3);
+                    st.executeUpdate(url4);
+                    JOptionPane.showMessageDialog(this,"Successfully Transfered !"); 
+            
+                }catch(ClassNotFoundException | SQLException e){
+                    System.out.println(e);
+                    JOptionPane.showMessageDialog(this,"There has been an ERROR ! Sorry ! Try Again."); 
+                }
+                
+                
+              }else{
+                  JOptionPane.showMessageDialog(this,"Not enough balance in your account");
+              }
+              
+            }
+      
+    }//GEN-LAST:event_submitBtnActionPerformed
+
+
+        
+    
+    
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
